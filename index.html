@@ -100,51 +100,43 @@
                 </div>
             </div>
         </div>
+<!-- Main Navigation Bar -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo & Branding -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+            <img src="https://raw.githubusercontent.com/nfel9617-alt/test2/main/vou.png" alt="شعار منصة أثر" class="w-12 h-12 object-contain rounded-2xl shadow-sm">
+            <div>
+                <div class="flex items-center gap-1.5">
+                    <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">منصة أثر</h1>
+                    <span class="text-[10px] bg-emerald-100 text-primary font-bold px-2 py-0.5 rounded-full border border-emerald-200/50">الوطنية</span>
+                </div>
+                <p class="text-[11px] text-slate-500 font-medium">وزارة الشباب والرياضة • مرافقة واستثمار المبادرات</p>
+            </div>
+        </div>
 
-        <!-- Main Navigation Bar -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo & Branding -->
-<div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-    <img src="https://raw.githubusercontent.com/nfel9617-alt/test2/main/vou.png" alt="شعار منصة أثر" class="w-12 h-12 object-contain rounded-2xl shadow-sm">
-    <div>
-        <h1 class="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            منصة أثر
-            <span class="text-[10px] bg-emerald-100 text-primary font-bold px-2 py-0.5 rounded-full border border-emerald-200/50">الوطنية</span>
-        </h1>
-        <p class="text-[11px] text-slate-500 font-medium">وزارة الشباب والرياضة</p>
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-600">
+            <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2 active-nav">
+                <i data-lucide="home" class="w-4 h-4"></i> الرئيسية
+            </button>
+            <button id="nav-initiatives" onclick="switchTab('initiatives')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                <i data-lucide="compass" class="w-4 h-4"></i> دليل المبادرات
+            </button>
+            <button id="nav-investors" onclick="switchTab('investors')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                <i data-lucide="briefcase" class="w-4 h-4"></i> الشركاء الاقتصاديون (CSR)
+            </button>
+            <button id="nav-messages" onclick="switchTab('messages')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                <i data-lucide="message-square" class="w-4 h-4"></i> المركز التفاعلي
+            </button>
+            <button id="nav-create-activity" onclick="switchTab('create-activity')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2 text-emerald-700 bg-emerald-50 hover:bg-emerald-100">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> إنشاء نشاط
+            </button>
+        </nav>
+
     </div>
 </div>
-        
-             
-                    <div>
-                        <div class="flex items-center gap-1.5">
-                            <h1 class="text-2xl font-black text-slate-900 tracking-tight">أَثَــر</h1>
-                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">الرسمية</span>
-                        </div>
-                        <p class="text-[11px] text-slate-500 font-medium">مرافقة، تأطير واستثمار المبادرات الشبابية</p>
-                    </div>
-                </div>
-
-                <!-- Desktop Navigation Links -->
-                <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-600">
-                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2 active-nav">
-                        <i data-lucide="home" class="w-4 h-4"></i> الرئيسية
-                    </button>
-                    <button id="nav-initiatives" onclick="switchTab('initiatives')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
-                        <i data-lucide="compass" class="w-4 h-4"></i> دليل المبادرات
-                    </button>
-                    <button id="nav-investors" onclick="switchTab('investors')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
-                        <i data-lucide="briefcase" class="w-4 h-4"></i> الشركاء الاقتصاديون (CSR)
-                    </button>
-                    <button id="nav-messages" onclick="switchTab('messages')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
-                        <i data-lucide="message-square" class="w-4 h-4"></i> المركز التفاعلي
-                    </button>
-                    <button id="nav-create-activity" onclick="switchTab('create-activity')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2 text-emerald-700 bg-emerald-50 hover:bg-emerald-100">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i> إنشاء نشاط
-                    </button>
-                </nav>
-
                 <!-- User Quick Profile Status -->
                 <div class="flex items-center gap-3">
                     <div onclick="switchTab('auth')" class="flex items-center gap-3 p-1.5 pl-3 rounded-2xl border border-slate-200 hover:border-emerald-500 transition cursor-pointer bg-slate-50 hover:bg-white shadow-sm">

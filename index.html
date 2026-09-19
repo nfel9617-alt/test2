@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة أثر - المنصة الوطنية للمبادرات الشبابية والتطوعية</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#059669',
+                            dark: '#047857',
+                            light: '#10b981',
+                            subtle: '#ecfdf5'
+                        },
+                        national: {
+                            red: '#d97706',
+                            green: '#15803d',
+                            navy: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .active-nav {
+            background-color: #ecfdf5;
+            color: #059669;
+            font-weight: 700;
+            border-bottom: 2px solid #059669;
+        }
+
+        /* Custom Scrollbar for Chat & Grids */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Toast Animation */
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .toast-animate {
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none w-full max-w-md px-4"></div>
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <!-- Top Official Ribbon -->
+        <div class="bg-slate-900 text-white text-[11px] py-1.5 px-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="font-medium tracking-wide">الجمهورية الجزائرية الديمقراطية الشعبية </span>
+                </div>
+                <div class="hidden md:flex items-center gap-4 text-slate-300">
+                    <span>المنصة الوطنية الموحدة للمبادرات الشبابية والتطوعية "أثر"</span>
+                    <span>•</span>
+                    <span class="text-emerald-400 font-bold">CSR الجزائر</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Branding -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-2xl flex items-center justify-center text-white shadow-md shadow-emerald-600/20">
+                        <i data-lucide="layers" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <h1 class="text-2xl font-black text-slate-900 tracking-tight">أَثَــر</h1>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">الرسمية</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 font-medium">مرافقة، تأطير واستثمار المبادرات الشبابية</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-600">
+                    <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2 active-nav">
+                        <i data-lucide="home" class="w-4 h-4"></i> الرئيسية
+                    </button>
+                    <button id="nav-initiatives" onclick="switchTab('initiatives')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="compass" class="w-4 h-4"></i> دليل المبادرات
+                    </button>
+                    <button id="nav-investors" onclick="switchTab('investors')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="briefcase" class="w-4 h-4"></i> الشركاء الاقتصاديون (CSR)
+                    </button>
+                    <button id="nav-messages" onclick="switchTab('messages')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-4 h-4"></i> المركز التفاعلي
+                    </button>
+                    <button id="nav-create-activity" onclick="switchTab('create-activity')" class="nav-btn px-4 py-2.5 rounded-xl transition flex items-center gap-2 text-emerald-700 bg-emerald-50 hover:bg-emerald-100">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> إنشاء نشاط
+                    </button>
+                </nav>
+
+                <!-- User Quick Profile Status -->
+                <div class="flex items-center gap-3">
+                    <div onclick="switchTab('auth')" class="flex items-center gap-3 p-1.5 pl-3 rounded-2xl border border-slate-200 hover:border-emerald-500 transition cursor-pointer bg-slate-50 hover:bg-white shadow-sm">
+                        <img id="user-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Avatar" class="w-9 h-9 rounded-xl object-cover border border-emerald-500">
+                        <div class="text-right hidden sm:block">
+                            <p id="user-display-name" class="text-xs font-bold text-slate-800 leading-tight">زائر المنصة</p>
+                            <p id="user-display-role" class="text-[10px] text-emerald-600 font-semibold">متطوع جديد</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Row -->
+        <div class="lg:hidden border-t border-slate-100 px-2 py-2 flex items-center justify-around text-xs font-medium text-slate-600 overflow-x-auto">
+            <button onclick="switchTab('home')" class="px-2.5 py-1.5 rounded-lg flex flex-col items-center gap-1 shrink-0">
+                <i data-lucide="home" class="w-4 h-4"></i> الرئيسية
+            </button>
+            <button onclick="switchTab('initiatives')" class="px-2.5 py-1.5 rounded-lg flex flex-col items-center gap-1 shrink-0">
+                <i data-lucide="compass" class="w-4 h-4"></i> المبادرات
+            </button>
+            <button onclick="switchTab('investors')" class="px-2.5 py-1.5 rounded-lg flex flex-col items-center gap-1 shrink-0">
+                <i data-lucide="briefcase" class="w-4 h-4"></i> المستثمرون
+            </button>
+            <button onclick="switchTab('messages')" class="px-2.5 py-1.5 rounded-lg flex flex-col items-center gap-1 shrink-0">
+                <i data-lucide="message-square" class="w-4 h-4"></i> المحادثات
+            </button>
+            <button onclick="switchTab('create-activity')" class="px-2.5 py-1.5 rounded-lg flex flex-col items-center gap-1 shrink-0 text-emerald-600">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> نشاط جديد
+            </button>
+            <button onclick="switchTab('auth')" class="px-2.5 py-1.5 rounded-lg flex flex-col items-center gap-1 shrink-0">
+                <i data-lucide="user" class="w-4 h-4"></i> حسابي
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ================= View 1: Home View ================= -->
+        <section id="view-home" class="view-section space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white p-8 sm:p-12 lg:p-16 shadow-xl">
+                <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center"></div>
+                <div class="relative z-10 max-w-3xl space-y-6">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i> تأطير رسمي وموثق للنشاط التطوعي بالجزائر
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black leading-tight tracking-tight">
+                        حوّل طاقاتك الشبابية إلى <span class="text-emerald-400 underline decoration-emerald-500 decoration-wavy decoration-2">أَثَــر</span> ملموس في وطنك
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        المنصة الوطنية الرقمية الموحدة لربط المتطوعين، الجمعيات الولائية والوطنية مع الشركاء الاقتصاديين ومؤسسات الاستثمار الاجتماعي تحت رعاية وزارة الشباب والرياضة.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <button onclick="switchTab('initiatives')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center gap-2 text-sm">
+                            <i data-lucide="search" class="w-4 h-4"></i> استكشف المبادرات المتاحة
+                        </button>
+                        <button onclick="switchTab('auth')" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-6 py-3.5 rounded-xl transition border border-white/20 text-sm">
+                            سجل كمنظمة أو متطوع
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Statistics Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-slate-900">+48,000</p>
+                        <p class="text-xs text-slate-500 font-medium">متطوع مسجل</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold shrink-0">
+                        <i data-lucide="award" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-slate-900">1,250</p>
+                        <p class="text-xs text-slate-500 font-medium">مبادرة منجزة</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold shrink-0">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-slate-900">58</p>
+                        <p class="text-xs text-slate-500 font-medium">ولاية مغطاة</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold shrink-0">
+                        <i data-lucide="coins" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-slate-900">120M DZD</p>
+                        <p class="text-xs text-slate-500 font-medium">استثمارات CSR ممولة</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Highlights Section -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">أبرز المبادرات الوطنية والولائية النشطة</h3>
+                        <p class="text-xs text-slate-500">فرص تطوعية مؤطرة متاحة للتسجيل الفوري</p>
+                    </div>
+                    <button onclick="switchTab('initiatives')" class="text-primary text-xs font-bold hover:underline flex items-center gap-1">
+                        عرض الكل <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+                <div id="home-featured-initiatives" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- ================= View 2: Initiatives View ================= -->
+        <section id="view-initiatives" class="view-section hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">دليل المبادرات والأنشطة الشبابية</h2>
+                        <p class="text-xs text-slate-500">تصفح كافة الفعاليات والمشاريع التطوعية عبر 58 ولاية</p>
+                    </div>
+                    <button onclick="switchTab('create-activity')" class="bg-primary hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> إدراج نشاط جديد
+                    </button>
+                </div>
+
+                <!-- Filters Bar -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <input type="text" id="filter-search" oninput="renderActivities()" placeholder="بحث باسم المبادرة أو الجهة..." class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                    
+                    <select id="filter-wilaya" onchange="renderActivities()" class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                        <option value="جميع الولايات">جميع الولايات (58 ولاية)</option>
+                        <option value="الجزائر العاصمة">01 - الجزائر العاصمة</option>
+                        <option value="وهران">31 - وهران</option>
+                        <option value="قسنطينة">25 - قسنطينة</option>
+                        <option value="الجلفة">17 - الجلفة</option>
+                        <option value="ورقلة">30 - ورقلة</option>
+                        <option value="عنابة">23 - عنابة</option>
+                    </select>
+
+                    <select id="filter-category" onchange="renderActivities()" class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                        <option value="الكل">جميع التصنيفات</option>
+                        <option value="تنظيم ولائي">تنظيم ولائي</option>
+                        <option value="تنظيم وطني">تنظيم وطني</option>
+                        <option value="بيئة وتشجير">بيئة وتشجير</option>
+                        <option value="ثقافي وتراثي">ثقافي وتراثي</option>
+                        <option value="تضامن وإغاثة">تضامن وإغاثة</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Initiatives Dynamic Grid -->
+            <div id="initiatives-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- ================= View 3: Investors / CSR View ================= -->
+        <section id="view-investors" class="view-section hidden space-y-8">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-br from-slate-900 to-blue-950 rounded-3xl p-8 text-white space-y-4 relative overflow-hidden shadow-xl">
+                <div class="max-w-2xl space-y-3 relative z-10">
+                    <span class="bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] font-bold px-3 py-1 rounded-full inline-block">
+                        الاستثمار الاجتماعي الموجه CSR
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black">الشركاء الاقتصاديون والمسؤولية المجتمعية</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        ربط الشركات الوطنية، المؤسسات الاقتصادية والخاصة مع الجمعيات والمبادرات المعتمدة لتقديم الدعم المالي، اللوجستي، والتدريب.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Add Investment Offer Toggle Form Section -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">إضافة عرض استثمار / رعاية جديد (خاص بالمستثمرين)</h3>
+                        <p class="text-xs text-slate-500">حدد إمكانيات ومجالات الدعم المتاحة لمؤسستك لدعم الشباب</p>
+                    </div>
+                    <button onclick="toggleCSROffersForm()" id="btn-toggle-csr-form" class="text-xs font-bold bg-emerald-50 text-primary border border-emerald-200 px-4 py-2 rounded-xl hover:bg-emerald-100 transition">
+                        + إظهار نموذج العرض
+                    </button>
+                </div>
+
+                <!-- Form to Add Investment Capability -->
+                <form id="form-create-csr-offer" onsubmit="handleCreateCSROffer(event)" class="hidden space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-200/60">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">اسم الشركة / المستثمر *</label>
+                            <input type="text" id="csr-company-name" required placeholder="مثال: سوناطراك / مؤسسة الجزائر للتأمين" class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">الميزانية أو حجم الدعم المخصص (بالدينار DZD)</label>
+                            <input type="text" id="csr-budget" placeholder="مثال: 2,500,000 د.ج" class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">أنواع ومجالات الدعم المتاحة للاستثمار *</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <label class="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-slate-200 cursor-pointer">
+                                <input type="checkbox" name="csr_caps" value="دعم مالي مباشر" class="accent-emerald-600">
+                                <span> دعم مالي مباشر</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-slate-200 cursor-pointer">
+                                <input type="checkbox" name="csr_caps" value="تجهيزات ولوجستيات" class="accent-emerald-600">
+                                <span>تجهيزات ولوجستيات</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-slate-200 cursor-pointer">
+                                <input type="checkbox" name="csr_caps" value="تدريب وتأطير" class="accent-emerald-600">
+                                <span> تدريب وتأطير</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-slate-200 cursor-pointer">
+                                <input type="checkbox" name="csr_caps" value="تغطية إعلامية ورعاية" class="accent-emerald-600">
+                                <span>تغطية ورعاية كاملة</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">الولايات المستهدفة</label>
+                            <input type="text" id="csr-wilayas" placeholder="مثال: ورقلة، حاسي مسعود، أو كامل التراب الوطني" class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">شعار / صورة المؤسسة (معاينة حية)</label>
+                            <input type="file" id="csr-logo-file" accept="image/*" onchange="previewCSRLogo(event)" class="w-full text-xs p-2 rounded-xl border border-slate-200 bg-white">
+                            <input type="hidden" id="csr-logo-dataurl" value="https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=300">
+                        </div>
+                    </div>
+
+                    <div id="csr-logo-preview-box" class="hidden flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 w-fit">
+                        <img id="csr-logo-preview-img" src="" class="w-12 h-12 object-contain rounded-lg border" alt="CSR Logo Preview">
+                        <span class="text-xs text-slate-600 font-medium">معاينة شعار المؤسسة</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">تفاصيل وشروط برنامج الاستثمار الاجتماعية</label>
+                        <textarea id="csr-description" rows="3" placeholder="اشرح الشروط والمعايير المطلوبة لقبول المبادرات التطوعية..." class="w-full text-xs p-3 rounded-xl border border-slate-200 bg-white"></textarea>
+                    </div>
+
+                    <button type="submit" class="bg-primary hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl text-xs transition">
+                        نشر عرض الاستثمار الحي
+                    </button>
+                </form>
+            </div>
+
+            <!-- Dynamic Investors Cards Container -->
+            <div id="investors-cards-container" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- ================= View 4: Live Messaging View ================= -->
+        <section id="view-messages" class="view-section hidden">
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-3 h-[600px]">
+                
+                <!-- Contacts List Sidebar -->
+                <div class="border-b md:border-b-0 md:border-l border-slate-200 bg-slate-50 flex flex-col">
+                    <div class="p-4 border-b border-slate-200 bg-white">
+                        <h3 class="font-bold text-slate-900 text-sm">مراكز المحادثات الموثقة</h3>
+                        <p class="text-[11px] text-slate-500">مؤطرين ولائيين، جمعيات ومستثمرين</p>
+                    </div>
+                    <div id="chat-contacts-list" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
+                </div>
+
+                <!-- Chat Box Main Window -->
+                <div class="md:col-span-2 flex flex-col bg-white">
+                    <!-- Chat Header -->
+                    <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            <div>
+                                <h4 id="active-chat-title" class="font-bold text-slate-900 text-sm">حدد جهة تواصل للبدء</h4>
+                                <span class="text-[10px] text-emerald-600 font-semibold">محادثة حية مشفرة وتفاعلية</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages Log -->
+                    <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/30"></div>
+
+                    <!-- Chat Input Field -->
+                    <div class="p-3 border-t border-slate-200 bg-white flex items-center gap-2">
+                        <input type="text" id="chat-input-text" onkeypress="if(event.key==='Enter') sendChatMessage()" placeholder="اكتب رسالتك الاستفسارية هنا..." class="flex-1 text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 bg-slate-50 focus:bg-white">
+                        <button onclick="sendChatMessage()" class="bg-primary hover:bg-emerald-700 text-white p-3 rounded-xl transition shrink-0">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= View 5: Create Activity View ================= -->
+        <section id="view-create-activity" class="view-section hidden max-w-2xl mx-auto">
+            <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h2 class="text-2xl font-black text-slate-900">إدراج مشروع أو نشاط جديد</h2>
+                    <p class="text-xs text-slate-500">خاص بالجمعيات والتنظيمات الولائية والوطنية المعتمدة</p>
+                </div>
+
+                <!-- Volunteer Warning Notification Box if logged as Volunteer -->
+                <div id="volunteer-create-warning" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-800 text-xs flex items-start gap-3">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="font-bold">تنبيه الصلاحية:</p>
+                        <p>أنت مسجل حالياً بصفة متطوع. يمكن إنشاؤك للأنشطة للعرض والاختبار التجريبي، لكن لنشرها رسمياً يجب ترقية حسابك لصفة جمعية أو تنظيم معتمد.</p>
+                    </div>
+                </div>
+
+                <form id="createActivityForm" onsubmit="handleCreateActivity(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">عنوان النشاط / المبادرة *</label>
+                        <input type="text" id="act-title" required placeholder="مثال: مشروع المخبزة التضامنية الرمضانية" class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">طبيعة التنظيم *</label>
+                            <select id="act-category" class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                                <option value="تنظيم ولائي">تنظيم ولائي</option>
+                                <option value="تنظيم وطني">تنظيم وطني</option>
+                                <option value="بيئة وتشجير">بيئة وتشجير</option>
+                                <option value="ثقافي وتراثي">ثقافي وتراثي</option>
+                                <option value="تضامن وإغاثة">تضامن وإغاثة</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">الولاية *</label>
+                            <input type="text" id="act-wilaya" required placeholder="مثال: قسنطينة أو كامل الولايات" class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">رابط صورة تعبيرية للنشاط</label>
+                        <input type="url" id="act-image" placeholder="https://images.unsplash.com/..." class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الوصف الشامل والأهداف التفصيلية *</label>
+                        <textarea id="act-description" rows="4" required placeholder="وضح الفئة المستهدفة، احتياجات النشاط، والمؤطرين المسؤولين..." class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition text-xs shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> نشر النشاط في الواجهة الوطنية
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= View 6: Auth & Profile View ================= -->
+        <section id="view-auth" class="view-section hidden max-w-xl mx-auto space-y-6">
+            <!-- Toggle Tabs for Auth Mode -->
+            <div class="bg-slate-100 p-1.5 rounded-2xl flex items-center gap-1">
+                <button id="tab-btn-login" onclick="toggleAuthMode('login')" class="flex-1 py-2.5 rounded-xl transition bg-white shadow-sm font-bold text-xs text-primary">تسجيل الدخول</button>
+                <button id="tab-btn-register" onclick="toggleAuthMode('register')" class="flex-1 py-2.5 rounded-xl transition text-xs font-bold text-slate-600">إنشاء حساب جديد</button>
+            </div>
+
+            <!-- Login Container -->
+            <div id="auth-login-container" class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">مرحباً بعودتك إلى "أَثَــر"</h3>
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">البريد الإلكتروني</label>
+                        <input type="email" id="login-email" required placeholder="name@domain.dz" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور</label>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition">
+                        تسجيل الدخول
+                    </button>
+                </form>
+            </div>
+
+            <!-- Registration Container -->
+            <div id="auth-register-container" class="hidden bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">إنشاء حساب جديد بالمنصة</h3>
+                <p class="text-xs text-slate-500">اختر صفة الحساب المناسبة للبدء في استخدام المزايا المخصصة</p>
+
+                <form onsubmit="handleRegister(event)" class="space-y-4">
+                    <!-- Role Selector -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الصفة / نوع الحساب *</label>
+                        <select id="reg-role" onchange="checkRoleDocRequirement(this.value)" class="w-full text-xs p-3 rounded-xl border border-slate-200 font-bold text-emerald-800 bg-emerald-50/50">
+                            <option value="متطوع">متطوع فردي</option>
+                            <option value="تنظيم ولائي">تنظيم / جمعية ولائية معتمدة</option>
+                            <option value="تنظيم وطني">تنظيم / جمعية وطنية معتمدة</option>
+                            <option value="مستثمر / شريك اقتصادي (CSR)">مستثمر / شريك اقتصادي (CSR)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الأول *</label>
+                            <input type="text" id="reg-firstName" required placeholder="محمد" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">اللقب *</label>
+                            <input type="text" id="reg-lastName" required placeholder="بن علي" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">العمر</label>
+                            <input type="number" id="reg-age" placeholder="24" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">الولاية</label>
+                            <input type="text" id="reg-wilaya" placeholder="وهران" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">البلدية</label>
+                            <input type="text" id="reg-commune" placeholder="السنية" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">البريد الإلكتروني *</label>
+                        <input type="email" id="reg-email" required placeholder="user@domain.dz" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور *</label>
+                        <input type="password" id="reg-password" required placeholder="••••••••" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                    </div>
+
+                    <!-- Dynamic Association Doc Field -->
+                    <div id="org-doc-container" class="hidden bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">وثيقة الاعتماد / الوصل الرسمي (PDF أو صورة)</label>
+                        <input type="file" id="reg-org-doc" class="w-full text-xs p-2 rounded-lg bg-white border border-slate-200">
+                    </div>
+
+                    <!-- Avatar Image Selector with Live Preview -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الصورة الشخصية / الشعار</label>
+                        <div class="flex items-center gap-3">
+                            <img id="form-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" class="w-12 h-12 rounded-xl object-cover border" alt="Preview">
+                            <input type="file" accept="image/*" onchange="previewFileAvatar(event)" class="text-xs flex-1">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition">
+                        تأكيد إنشاء الحساب
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Detailed Participation Modal -->
+    <div id="participationModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white max-w-lg w-full rounded-3xl shadow-2xl border border-slate-100 overflow-hidden space-y-5 p-6 relative">
+            <button onclick="closeParticipationModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600 p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="border-b border-slate-100 pb-3">
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">استمارة التطوع المؤطرة</span>
+                <h3 id="modal-act-title" class="text-lg font-bold text-slate-900 mt-1">اسم المبادرة</h3>
+            </div>
+
+            <form onsubmit="handleParticipationSubmit(event)" class="space-y-4">
+                <input type="hidden" id="modal-hidden-act-title">
+                <input type="hidden" id="modal-hidden-act-wilaya">
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الكامل *</label>
+                    <input type="text" id="part-fullname" required placeholder="أحمد بن يوسف" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">البريد الإلكتروني / الهاتف *</label>
+                        <input type="text" id="part-contact" required placeholder="06... أو email" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">ولاية الإقامة *</label>
+                        <input type="text" id="part-wilaya" required placeholder="قسنطينة" class="w-full text-xs p-3 rounded-xl border border-slate-200">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">دوافع وشرح اهتمامك بالتطوع في هذه المبادرة *</label>
+                    <textarea id="part-motivation" rows="3" required placeholder="اذكر مهاراتك أو ما يمكنك تقديمه لإنجاح هذه المبادرة..." class="w-full text-xs p-3 rounded-xl border border-slate-200"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-primary hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> إرسال طلب المشاركة
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-white border-t border-slate-800 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-600 rounded-xl flex items-center justify-center text-white">
+                    <i data-lucide="layers" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-white">منصة "أَثَــر" الوطنية الرقمية</p>
+                    <p class="text-[10px]">تحت إشراف هيئة أثر </p>
+                </div>
+            </div>
+            <p>© 2026 جميع الحقوق محفوظة لوزارة الشباب والرياضة.</p>
+        </div>
+    </footer>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkYFW0i0IYK1IT57jKZYo8S0GBZEdlyGUkBNtv6EbYPYS6eGUvg8nPaJrMvzGIAX6V/exec";
+
+        // Active Session User State
+        let currentUser = JSON.parse(localStorage.getItem('athar_active_session')) || {
+            name: "زائر المنصة",
+            email: "",
+            role: "متطوع",
+            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+        };
+
+        // Registered Accounts local state
+        let registeredAccounts = JSON.parse(localStorage.getItem('athar_users')) || [];
+
+        // Initial Activities Data
+        let initialActivities = JSON.parse(localStorage.getItem('athar_activities')) || [
+            {
+                title: "حملة تنظيف وتزيين المدينة القديمة",
+                category: "تنظيم ولائي",
+                wilaya: "قسنطينة",
+                organizer: "أحمد زروقي - مؤطر ولائي",
+                description: "مبادرة محلية تهدف لإعادة ترميم وتزيين أزقة السويقة بالتعاون مع شباب الأندية الثقافية والجمعيات البيئية.",
+                image: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title: "الحملة الوطنية لتشجير السد الأخضر",
+                category: "تنظيم وطني",
+                wilaya: "الجلفة",
+                organizer: "الجمعية الوطنية للتنمية البيئية",
+                description: "مبادرة كبرى بالتنسيق مع وزارة الشباب والرياضة لغرس 100 ألف شجرة عبر عدة ولايات ستيبيّة.",
+                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=600"
+            },
+            {
+                title: "قافلة الشباب التكنولوجية للابتكار",
+                category: "تنظيم وطني",
+                wilaya: "وهران",
+                organizer: "نادي الابتكار والذكاء الاصطناعي",
+                description: "ورشات تدريبية للشباب في البرمجة وتصميم الحلول الذكية الموجهة لحل مشكلات الجماعات المحلية.",
+                image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600"
+            }
+        ];
+
+        // Initial CSR Investors Offers List
+        let csrOffers = JSON.parse(localStorage.getItem('athar_csr_offers')) || [
+            {
+                company: "مؤسسة سوناطراك - قسم الاستثمار الاجتماعي",
+                budget: "15,000,000 د.ج",
+                capabilities: ["دعم مالي مباشر", "تجهيزات ولوجستيات", "تغطية إعلامية ورعاية"],
+                wilayas: "ورقلة، حاسي مسعود، قسنطينة، وتمنراست",
+                logo: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=300",
+                description: "نمول المبادرات البيئية والشبابية الموجهة للولايات الجنوبية ومشاريع الابتكار التكنولوجي ذات الأثر الاجتماعي."
+            },
+            {
+                company: "اتصالات الجزائر - CSR Program",
+                budget: "8,000,000 د.ج",
+                capabilities: ["تدريب وتأطير", "تجهيزات ولوجستيات"],
+                wilayas: "كامل التراب الوطني (58 ولاية)",
+                logo: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=300",
+                description: "نقدم التجهيزات التكنولوجية، الاشتراكات والربط بالإنترنت عالي التدفق للنوادي الشبابية المعتمدة."
+            }
+        ];
+
+        // Live Chat Contacts & History
+        let chatContacts = JSON.parse(localStorage.getItem('athar_chat_contacts')) || [
+            { id: "أحمد زروقي (مؤطر ولائي - قسنطينة)", name: "أحمد زروقي", role: "مؤطر ولائي - قسنطينة", avatar: "أز", color: "bg-emerald-100 text-emerald-800" },
+            { id: "الجمعية الوطنية للتنمية البيئية", name: "الجمعية الوطنية بيئة", role: "تنظيم وطني", avatar: "بيئة", color: "bg-emerald-800 text-white" },
+            { id: "مؤسسة سوناطراك - قسم الاستثمار الاجتماعي", name: "مؤسسة سوناطراك", role: "مستثمر CSR", avatar: "CSR", color: "bg-blue-100 text-blue-700" }
+        ];
+
+        let liveChatData = JSON.parse(localStorage.getItem('athar_chat_data')) || {
+            "أحمد زروقي (مؤطر ولائي - قسنطينة)": [
+                { sender: "أحمد زروقي", text: "مرحباً بك في منصة أثر. كيف يمكننا مساعدتك في الأنشطة الولائية بقسنطينة؟", time: "09:30 AM" }
+            ],
+            "مؤسسة سوناطراك - قسم الاستثمار الاجتماعي": [
+                { sender: "مؤسسة سوناطراك", text: "أهلاً بك! نرحب بتقديم عروض الرعاية للمبادرات التطوعية ذات الأثر الملموس.", time: "11:00 AM" }
+            ]
+        };
+
+        let activeChatContactId = "أحمد زروقي (مؤطر ولائي - قسنطينة)";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            updateUserProfileUI();
+            renderActivities();
+            renderInvestors();
+            renderChatContacts();
+            selectChatContact(activeChatContactId);
+        });
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-emerald-900 border-emerald-500 text-white' : 'bg-slate-900 border-amber-500 text-white';
+            const iconName = type === 'success' ? 'check-circle' : 'info';
+            
+            toast.className = `toast-animate p-4 rounded-2xl border shadow-xl flex items-center justify-between gap-3 text-xs font-bold pointer-events-auto ${bgColor}`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i data-lucide="${iconName}" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white p-1">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+
+        function switchTab(tabId) {
+            // Permission Check for creating activity
+            if (tabId === 'create-activity') {
+                const warningBox = document.getElementById('volunteer-create-warning');
+                if (currentUser.role === 'متطوع') {
+                    warningBox.classList.remove('hidden');
+                } else {
+                    warningBox.classList.add('hidden');
+                }
+            }
+
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active-nav'));
+
+            const targetView = document.getElementById('view-' + tabId);
+            if (targetView) targetView.classList.remove('hidden');
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) activeNav.classList.add('active-nav');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        }
+
+        function toggleAuthMode(mode) {
+            const loginBox = document.getElementById('auth-login-container');
+            const regBox = document.getElementById('auth-register-container');
+            const btnLogin = document.getElementById('tab-btn-login');
+            const btnReg = document.getElementById('tab-btn-register');
+
+            if (mode === 'login') {
+                loginBox.classList.remove('hidden');
+                regBox.classList.add('hidden');
+                btnLogin.className = "flex-1 py-2.5 rounded-xl transition bg-white shadow-sm font-bold text-xs text-primary";
+                btnReg.className = "flex-1 py-2.5 rounded-xl transition text-xs font-bold text-slate-600";
+            } else {
+                regBox.classList.remove('hidden');
+                loginBox.classList.add('hidden');
+                btnReg.className = "flex-1 py-2.5 rounded-xl transition bg-white shadow-sm font-bold text-xs text-primary";
+                btnLogin.className = "flex-1 py-2.5 rounded-xl transition text-xs font-bold text-slate-600";
+            }
+        }
+
+        function checkRoleDocRequirement(roleVal) {
+            const docBox = document.getElementById('org-doc-container');
+            if (roleVal === 'تنظيم ولائي' || roleVal === 'تنظيم وطني') {
+                docBox.classList.remove('hidden');
+            } else {
+                docBox.classList.add('hidden');
+            }
+        }
+
+        function previewFileAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('form-avatar-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('reg-firstName').value;
+            const lastName = document.getElementById('reg-lastName').value;
+            const role = document.getElementById('reg-role').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            const newUser = {
+                name: firstName + " " + lastName,
+                email: email,
+                password: password,
+                role: role,
+                avatar: document.getElementById('form-avatar-preview').src
+            };
+
+            registeredAccounts.push(newUser);
+            localStorage.setItem('athar_users', JSON.stringify(registeredAccounts));
+
+            currentUser = newUser;
+            localStorage.setItem('athar_active_session', JSON.stringify(currentUser));
+            updateUserProfileUI();
+
+            // Dispatch payload to Apps Script endpoint
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "register",
+                    firstName, lastName, role, email,
+                    wilaya: document.getElementById('reg-wilaya').value
+                })
+            });
+
+            showToast(`تم إنشاء وتأكيد حسابك بنجاح بصفة (${role})!`);
+            switchTab('home');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            const foundUser = registeredAccounts.find(acc => acc.email === email && acc.password === password);
+
+            if (foundUser) {
+                currentUser = { ...foundUser };
+            } else {
+                currentUser = {
+                    name: email.split('@')[0],
+                    email: email,
+                    role: "متطوع",
+                    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+                };
+            }
+
+            localStorage.setItem('athar_active_session', JSON.stringify(currentUser));
+            updateUserProfileUI();
+            showToast(`أهلاً بعودتك يا ${currentUser.name}! تم تسجيل الدخول بنجاح.`);
+            switchTab('home');
+        }
+
+        function updateUserProfileUI() {
+            document.getElementById('user-display-name').innerText = currentUser.name;
+            document.getElementById('user-display-role').innerText = currentUser.role;
+            if (currentUser.avatar) {
+                document.getElementById('user-avatar-preview').src = currentUser.avatar;
+            }
+        }
+
+        function renderActivities() {
+            const grid = document.getElementById('initiatives-grid');
+            const homeFeatured = document.getElementById('home-featured-initiatives');
+            
+            const searchVal = document.getElementById('filter-search') ? document.getElementById('filter-search').value.toLowerCase() : "";
+            const wilayaVal = document.getElementById('filter-wilaya') ? document.getElementById('filter-wilaya').value : "جميع الولايات";
+            const categoryVal = document.getElementById('filter-category') ? document.getElementById('filter-category').value : "الكل";
+
+            grid.innerHTML = "";
+            if (homeFeatured) homeFeatured.innerHTML = "";
+
+            const filtered = initialActivities.filter(act => {
+                const matchesSearch = act.title.toLowerCase().includes(searchVal) || act.description.toLowerCase().includes(searchVal);
+                const matchesWilaya = (wilayaVal === "جميع الولايات") || act.wilaya.includes(wilayaVal.replace(/^[0-9]+\s*-\s*/, ''));
+                const matchesCat = (categoryVal === "الكل") || act.category === categoryVal;
+                return matchesSearch && matchesWilaya && matchesCat;
+            });
+
+            filtered.forEach((item, index) => {
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition duration-300">
+                        <div>
+                            <div class="h-44 w-full overflow-hidden relative">
+                                <img src="${item.image}" class="w-full h-full object-cover" alt="Activity Image" onerror="this.src='https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&q=80&w=600'">
+                                <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-emerald-800 font-bold text-[10px] px-3 py-1 rounded-full shadow-sm">
+                                    ${item.category} • ${item.wilaya}
+                                </span>
+                            </div>
+                            <div class="p-5 space-y-2">
+                                <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
+                                <p class="text-xs text-slate-600 leading-relaxed line-clamp-3">${item.description}</p>
+                            </div>
+                        </div>
+                        <div class="p-5 pt-0 space-y-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="text-[11px] text-slate-500 font-medium truncate max-w-[160px]">${item.organizer}</span>
+                                <button onclick="startDirectChat('${item.organizer}', 'تنظيم معتمد')" class="text-primary text-xs font-bold flex items-center gap-1 hover:underline shrink-0">
+                                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i> تواصل
+                                </button>
+                            </div>
+                            <button onclick="openParticipationModal('${item.title}', '${item.wilaya}')" class="w-full bg-primary hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
+                                <i data-lucide="user-check" class="w-4 h-4"></i> تسجيل مشاركتك
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                grid.innerHTML += cardHtml;
+                if (homeFeatured && index < 3) {
+                    homeFeatured.innerHTML += cardHtml;
+                }
+            });
+
+            lucide.createIcons();
+        }
+
+        function toggleCSROffersForm() {
+            const form = document.getElementById('form-create-csr-offer');
+            const btn = document.getElementById('btn-toggle-csr-form');
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                btn.innerText = "- إخفاء نموذج العرض";
+            } else {
+                form.classList.add('hidden');
+                btn.innerText = "+ إظهار نموذج العرض";
+            }
+        }
+
+        function previewCSRLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('csr-logo-dataurl').value = e.target.result;
+                    document.getElementById('csr-logo-preview-img').src = e.target.result;
+                    document.getElementById('csr-logo-preview-box').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleCreateCSROffer(e) {
+            e.preventDefault();
+            const company = document.getElementById('csr-company-name').value;
+            const budget = document.getElementById('csr-budget').value || "حسب الاتفاق";
+            const wilayas = document.getElementById('csr-wilayas').value || "جميع الولايات";
+            const description = document.getElementById('csr-description').value;
+            const logo = document.getElementById('csr-logo-dataurl').value;
+
+            // Get selected capability checkboxes
+            const selectedCaps = [];
+            document.querySelectorAll('input[name="csr_caps"]:checked').forEach(cb => {
+                selectedCaps.push(cb.value);
+            });
+
+            if (selectedCaps.length === 0) {
+                selectedCaps.push("دعم مالي ولوجستي");
+            }
+
+            const newOffer = {
+                company, budget, capabilities: selectedCaps, wilayas, logo, description
+            };
+
+            csrOffers.unshift(newOffer);
+            localStorage.setItem('athar_csr_offers', JSON.stringify(csrOffers));
+            renderInvestors();
+
+            // Dispatch payload to Google Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "create_csr_offer",
+                    company, budget, capabilities: selectedCaps.join(', '), wilayas, description
+                })
+            });
+
+            showToast("تم إدراج ونشر عرض الاستثمار الاجتماعي بنجاح!");
+            document.getElementById('form-create-csr-offer').reset();
+            toggleCSROffersForm();
+        }
+
+        function renderInvestors() {
+            const container = document.getElementById('investors-cards-container');
+            container.innerHTML = "";
+
+            csrOffers.forEach(offer => {
+                const capsBadges = offer.capabilities.map(c => `<span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md border border-blue-100">${c}</span>`).join(' ');
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition";
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${offer.logo}" class="w-12 h-12 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0" alt="Logo" onerror="this.src='https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=300'">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm leading-snug">${offer.company}</h4>
+                                <span class="text-[10px] text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-0.5">ميزانية مخصصة: ${offer.budget}</span>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">${offer.description}</p>
+
+                        <div class="space-y-1.5">
+                            <span class="text-[10px] text-slate-400 font-bold block">أنواع الدعم المتاح:</span>
+                            <div class="flex flex-wrap gap-1">${capsBadges}</div>
+                        </div>
+
+                        <div class="text-[11px] text-slate-500 font-medium">
+                            <span class="text-slate-400">الولايات المستهدفة:</span> ${offer.wilayas}
+                        </div>
+                    </div>
+
+                    <button onclick="startDirectChat('${offer.company}', 'مستثمر CSR', '${offer.logo}')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                        <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i> طلب رعاية / تواصل مباشر
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function openParticipationModal(title, wilaya) {
+            document.getElementById('modal-act-title').innerText = title;
+            document.getElementById('modal-hidden-act-title').value = title;
+            document.getElementById('modal-hidden-act-wilaya').value = wilaya;
+
+            if (currentUser.name !== "زائر المنصة") {
+                document.getElementById('part-fullname').value = currentUser.name;
+                document.getElementById('part-contact').value = currentUser.email || "";
+            }
+
+            document.getElementById('participationModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeParticipationModal() {
+            document.getElementById('participationModal').classList.add('hidden');
+        }
+
+        function handleParticipationSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('modal-hidden-act-title').value;
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "participate_detailed",
+                    title,
+                    fullName: document.getElementById('part-fullname').value,
+                    contact: document.getElementById('part-contact').value,
+                    motivation: document.getElementById('part-motivation').value
+                })
+            });
+
+            closeParticipationModal();
+            showToast(`تم إرسال طلب مشاركتك في "${title}" بنجاح!`);
+        }
+
+        function renderChatContacts() {
+            const container = document.getElementById('chat-contacts-list');
+            container.innerHTML = "";
+
+            chatContacts.forEach(c => {
+                const item = document.createElement('div');
+                item.onclick = () => selectChatContact(c.id);
+                item.className = `p-3 bg-white border rounded-xl cursor-pointer hover:border-emerald-500 transition flex items-center gap-3 ${activeChatContactId === c.id ? 'border-emerald-600 bg-emerald-50/50' : 'border-slate-200/80'}`;
+                item.innerHTML = `
+                    <div class="w-9 h-9 rounded-full ${c.color} flex items-center justify-center font-bold text-xs shrink-0">${c.avatar}</div>
+                    <div class="overflow-hidden">
+                        <p class="text-xs font-bold text-slate-800 truncate">${c.name}</p>
+                        <p class="text-[10px] text-slate-500 truncate">${c.role}</p>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function startDirectChat(contactName, roleTitle, avatarImg = null) {
+            const contactId = contactName;
+            
+            // Add to contact list if not existing
+            if (!chatContacts.some(c => c.id === contactId)) {
+                chatContacts.push({
+                    id: contactId,
+                    name: contactName,
+                    role: roleTitle,
+                    avatar: contactName.substring(0, 2),
+                    color: "bg-blue-100 text-blue-700"
+                });
+                localStorage.setItem('athar_chat_contacts', JSON.stringify(chatContacts));
+                renderChatContacts();
+            }
+
+            if (!liveChatData[contactId]) {
+                liveChatData[contactId] = [
+                    { sender: contactName, text: `مرحباً بك! يمكنك إرسال استفسارك أو طلب الرعاية مباشرة للبدء.`, time: "الان" }
+                ];
+                localStorage.setItem('athar_chat_data', JSON.stringify(liveChatData));
+            }
+
+            switchTab('messages');
+            selectChatContact(contactId);
+        }
+
+        function selectChatContact(contactId) {
+            activeChatContactId = contactId;
+            document.getElementById('active-chat-title').innerText = contactId;
+
+            if (!liveChatData[contactId]) {
+                liveChatData[contactId] = [];
+            }
+
+            renderChatContacts();
+            renderMessagesContainer();
+        }
+
+        function renderMessagesContainer() {
+            const container = document.getElementById('chat-messages-container');
+            container.innerHTML = "";
+
+            const msgs = liveChatData[activeChatContactId] || [];
+
+            msgs.forEach(m => {
+                const isMe = m.sender === currentUser.name;
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `flex ${isMe ? 'justify-start' : 'justify-end'}`;
+                msgDiv.innerHTML = `
+                    <div class="${isMe ? 'bg-emerald-700 text-white rounded-tr-none' : 'bg-white text-slate-800 border border-slate-200 rounded-tl-none'} p-3 rounded-2xl text-xs max-w-md shadow-sm">
+                        <p class="font-bold text-[10px] mb-1 opacity-80">${m.sender}</p>
+                        <p class="leading-relaxed">${m.text}</p>
+                        <span class="text-[9px] ${isMe ? 'text-emerald-200' : 'text-slate-400'} mt-1 block text-left font-mono">${m.time}</span>
+                    </div>
+                `;
+                container.appendChild(msgDiv);
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input-text');
+            const msg = input.value.trim();
+            if (!msg || !activeChatContactId) return;
+
+            const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const newMsg = {
+                sender: currentUser.name,
+                text: msg,
+                time: timeNow
+            };
+
+            liveChatData[activeChatContactId].push(newMsg);
+            localStorage.setItem('athar_chat_data', JSON.stringify(liveChatData));
+            renderMessagesContainer();
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "send_message",
+                    sender: currentUser.name,
+                    recipient: activeChatContactId,
+                    message: msg
+                })
+            });
+
+            input.value = "";
+        }
+
+        function handleCreateActivity(e) {
+            e.preventDefault();
+            const title = document.getElementById('act-title').value;
+            const category = document.getElementById('act-category').value;
+            const wilaya = document.getElementById('act-wilaya').value;
+            const description = document.getElementById('act-description').value;
+            const image = document.getElementById('act-image').value || "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&q=80&w=600";
+
+            const newAct = {
+                title, category, wilaya,
+                organizer: currentUser.name + " (" + currentUser.role + ")",
+                description, image
+            };
+
+            initialActivities.unshift(newAct);
+            localStorage.setItem('athar_activities', JSON.stringify(initialActivities));
+            renderActivities();
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "create_initiative",
+                    title, category, wilaya, organizer: currentUser.name, description
+                })
+            });
+
+            showToast("تم إدراج المبادرة ونشرها مباشرة في الواجهة!");
+            document.getElementById('createActivityForm').reset();
+            switchTab('initiatives');
+        }
+    </script>
+</body>
+</html>
